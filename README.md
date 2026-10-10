@@ -13,12 +13,25 @@ Requires Python 3.12.
 ```powershell
 py -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe scr/pr-analyzer/models.py
+.\.venv\Scripts\python.exe experiments/01_pydantic_basics/demo.py
 ```
 
 The script prints a valid input, an expected validation error for an integer where a string is required, and the fields of a validated example review response.
 
 Pydantic validates structure and types; it does not establish that a review finding is correct.
+
+## Repository structure
+
+```text
+experiments/
+  01_pydantic_basics/
+    demo.py
+    README.md
+src/
+  pr_analyzer/       # Reserved for application code
+```
+
+Learning trials and their notes live under `experiments/`. Application code will live under `src/pr_analyzer/` once the review contract is defined. See [the first experiment](experiments/01_pydantic_basics/README.md).
 
 ## Planned MVP
 
@@ -47,3 +60,4 @@ For a requirement to reject payment on already-paid orders without charging agai
 - [ ] Collect a real diff and relevant surrounding code.
 
 This is a review aid under development, not an automatic approval tool.
+
