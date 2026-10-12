@@ -1,0 +1,14 @@
+{
+  "pr_url": "https://github.com/spring-projects/spring-petclinic/pull/2663",
+  "title": "Validate visit description length",
+  "description": "Adds validation to limit visit descriptions to 255 characters, matching the H2 and MySQL database schemas.\n\nAlso adds a regression test for a 256-character description.",
+  "changed_files": [
+    {
+      "path": "src/main/java/org/springframework/samples/petclinic/owner/Visit.java",
+      "patch": "@@ -24,6 +24,7 @@\n import jakarta.persistence.Entity;\n import jakarta.persistence.Table;\n import jakarta.validation.constraints.NotBlank;\n+import jakarta.validation.constraints.Size;\n \n /**\n  * Simple JavaBean domain object representing a visit.\n@@ -40,6 +41,7 @@ public class Visit extends BaseEntity {\n \tprivate LocalDate date;\n \n \t@NotBlank\n+\t@Size(max = 255)\n \tprivate String description;\n \n \t/**"
+    },
+    {
+      "patch": "@@ -106,4 +106,16 @@ void processNewVisitFormHasErrorsWhenVisitDateIsNotInFuture() throws Exception {\n \t\t\t.andExpect(view().name(\"pets/createOrUpdateVisitForm\"));\n \t}\n \n+\t@Test\n+\tvoid processNewVisitFormHasErrorsWhenDescriptionIsTooLong() throws Exception {\n+\t\tmockMvc\n+\t\t\t.perform(post(\"/owners/{ownerId}/pets/{petId}/visits/new\", TEST_OWNER_ID, TEST_PET_ID)\n+\t\t\t\t.param(\"name\", \"George\")\n+\t\t\t\t.param(\"date\", LocalDate.now().plusDays(1).toString())\n+\t\t\t\t.param(\"description\", \"a\".repeat(256)))\n+\t\t\t.andExpect(model().attributeHasFieldErrors(\"visit\", \"description\"))\n+\t\t\t.andExpect(status().isOk())\n+\t\t\t.andExpect(view().name(\"pets/createOrUpdateVisitForm\"));\n+\t}\n+\n }"
+    }
+  ]
+}
