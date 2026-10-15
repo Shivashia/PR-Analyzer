@@ -4,13 +4,13 @@ from pydantic import BaseModel, Field
 
 class ChangedFile(BaseModel):
     path : str = Field(min_length=1)
-    patch : str
+    patch : str | None
 
 
 class PullRequestInput(BaseModel):
     pr_url : str
     title : str
-    description : str
+    description : str | None
     changed_files: list[ChangedFile]
 
 
